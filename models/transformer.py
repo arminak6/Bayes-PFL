@@ -598,7 +598,7 @@ class VisionTransformer(nn.Module):
         # attn = attn[0, 0, 1:].view(14, 14)  # 49
         B, C, L = attn[0].shape
         H = int(np.sqrt(L-1))
-        out_attn = torch.zeros([H, H]).to('cuda')
+        out_attn = torch.zeros([H, H], device=x.device)
         for i in range(len(attn)):
             out_attn += attn[i][0, 0, 1:].view(H, H)
 

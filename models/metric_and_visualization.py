@@ -5,7 +5,10 @@ from scipy.ndimage import gaussian_filter
 import pandas as pd
 import os 
 import cv2
-from skimage import measure
+try:
+    from skimage import measure
+except Exception:
+    measure = None
 
 datasets_name_list = ["mvtec","visa","BSD","RSDD", "KSDD2", "ISIC", "ClinicDB", "ColonDB", "HeadCT", "TN3K", "DTD", "Endo", "BrainMRI", "Br35H", "Kvasir", "BTAD"]
 
@@ -43,6 +46,8 @@ def apply_ad_scoremap(image, scoremap, alpha=0.5):
 
 
 def cal_pro_score(masks, amaps, max_step=200, expect_fpr=0.3):
+    if measure is None:
+        return 0
     # ref: https://github.com/gudovskiy/cflow-ad/blob/master/train.py
     binary_amaps = np.zeros_like(amaps, dtype=bool)
     min_th, max_th = amaps.min(), amaps.max()
